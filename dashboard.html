@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New3D Gestão — Painel</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
+</head>
+<body class="app-page" data-page="dashboard">
+  <a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="sidebar" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topbar-title">New3D<span>Gestão</span></div>
+      <div class="topbar-actions">
+        <button id="quick-new-order" class="btn btn-primary">+ Novo pedido</button>
+      </div>
+      <button id="accessibility-toggle" class="btn btn-ghost accessibility-btn" aria-controls="accessibility-panel" aria-expanded="false">♿ Acessibilidade</button>
+      <div class="topbar-user">
+        <span class="role-badge" id="role-badge">—</span>
+        <span id="user-name">—</span>
+        <button id="logout-btn" class="btn btn-ghost">Sair</button>
+      </div>
+    </header>
+
+    <nav class="sidebar" id="sidebar" aria-label="Navegação principal">
+      <ul>
+        <li><a href="#" class="nav-link active" data-view="view-dashboard" aria-current="page">Painel</a></li>
+        <li><a href="#" class="nav-link" data-view="view-clientes">Pedidos e clientes</a></li>
+        <li class="nav-admin-only"><a href="#" class="nav-link" data-view="view-usuarios">Usuários</a></li>
+      </ul>
+    </nav>
+
+    <main id="main-content" class="content">
+
+      <!-- PAINEL -->
+      <section id="view-dashboard" class="view">
+        <h1>Painel</h1>
+        <p class="view-sub">Visão geral dos pedidos e do valor arrecadado.</p>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">Pedidos cadastrados</span>
+            <span class="stat-value" id="stat-total">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Em produção</span>
+            <span class="stat-value" id="stat-ativos">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Aguardando pagamento</span>
+            <span class="stat-value" id="stat-leads">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Valor arrecadado</span>
+            <span class="stat-value" id="stat-valor">R$ 0</span>
+          </div>
+        </div>
+
+        <div class="panel-grid">
+          <div class="panel">
+            <h2>Pedidos por status</h2>
+            <canvas id="chart-status" role="img" aria-label="Gráfico de barras com a quantidade de pedidos por status"></canvas>
+          </div>
+          <div class="panel">
+            <h2>Alertas</h2>
+            <ul class="alert-list" id="alert-list" aria-live="polite"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PEDIDOS (CRUD) -->
+      <section id="view-clientes" class="view" hidden>
+        <div class="view-header">
+          <div>
+            <h1>Pedidos e clientes</h1>
+            <p class="view-sub">Cadastre clientes, peças e acompanhe cada pedido da New3D.</p>
+          </div>
+          <button class="btn btn-primary" id="new-client-btn">Novo pedido</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Lista de pedidos cadastrados</caption>
+            <thead>
+              <tr>
+                <th scope="col">Cliente</th>
+                <th scope="col">Peça</th>
+                <th scope="col">Contato</th>
+                <th scope="col">Status</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="clients-tbody"></tbody>
+          </table>
+          <p id="clients-empty" class="empty-state" hidden>Nenhum pedido cadastrado ainda. Clique em "Novo pedido" para começar.</p>
+        </div>
+      </section>
+
+      <!-- USUÁRIOS (somente admin) -->
+      <section id="view-usuarios" class="view" hidden>
+        <h1>Usuários</h1>
+        <p class="view-sub">Contas com acesso ao sistema e seus níveis de permissão.</p>
+        <div class="table-wrap">
+          <table>
+            <caption class="sr-only">Lista de usuários do sistema</caption>
+            <thead>
+              <tr><th scope="col">Usuário</th><th scope="col">Nível</th></tr>
+            </thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MENU DE ACESSIBILIDADE -->
+  <div class="accessibility-panel" id="accessibility-panel" hidden role="dialog" aria-labelledby="accessibility-title">
+    <div class="accessibility-box">
+      <div class="accessibility-head"><h2 id="accessibility-title">Acessibilidade</h2><button id="accessibility-close" class="btn btn-ghost" type="button" aria-label="Fechar acessibilidade">Fechar</button></div>
+      <p>Ajuste a visualização do sistema conforme sua necessidade.</p>
+      <div class="accessibility-actions">
+        <button id="accessibility-font-decrease" class="btn btn-ghost" type="button">A− Diminuir texto</button>
+        <button id="accessibility-font-reset" class="btn btn-ghost" type="button">A Resetar texto</button>
+        <button id="accessibility-font-increase" class="btn btn-ghost" type="button">A+ Aumentar texto</button>
+        <button id="accessibility-contrast" class="btn btn-primary" type="button">Alto contraste</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PEDIDO -->
+  <div class="modal-backdrop" id="client-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <form id="client-form">
+        <h2 id="modal-title">Novo pedido</h2>
+        <input type="hidden" id="client-id">
+
+        <div class="field">
+          <label for="client-nome">Cliente</label>
+          <input type="text" id="client-nome" required>
+        </div>
+        <div class="field">
+          <label for="client-empresa">Peça / produto</label>
+          <input type="text" id="client-empresa" placeholder="Ex: Dragão articulado" required>
+        </div>
+        <div class="field">
+          <label for="client-email">Contato (WhatsApp ou e-mail)</label>
+          <input type="text" id="client-email">
+        </div>
+        <div class="field">
+          <label for="client-status">Status</label>
+          <select id="client-status">
+            <option value="Pedido recebido">Pedido recebido</option>
+            <option value="Em produção">Em produção</option>
+            <option value="Pago">Pago</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="client-valor">Valor (R$)</label>
+          <input type="number" id="client-valor" min="0" step="0.01" required>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="modal-cancel">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', initDashboardPage);
+  </script>
+</body>
+</html>

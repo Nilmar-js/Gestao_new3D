@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New3D Gestão — Entrar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+  <button id="accessibility-toggle" class="btn btn-ghost login-accessibility" aria-controls="accessibility-panel" aria-expanded="false">♿ Acessibilidade</button>
+  <main class="login-shell">
+    <section class="login-brand" aria-hidden="true">
+      <div class="brand-mark">3D</div>
+      <h1>New3D<span>Gestão</span></h1>
+      <p>Painel de pedidos e faturamento da impressão 3D.</p>
+      <ul class="brand-points">
+        <li>Pedidos e clientes em um só lugar</li>
+        <li>Controle do valor arrecadado</li>
+        <li>Permissões por nível de acesso</li>
+      </ul>
+    </section>
+
+    <section class="login-form-wrap">
+      <form id="login-form" class="login-form" novalidate>
+        <h2>Entrar na conta</h2>
+        <p class="form-help">Use uma das contas de demonstração abaixo ou crie a sua.</p>
+
+        <div class="field">
+          <label for="username">Usuário</label>
+          <input type="text" id="username" name="username" autocomplete="username" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Senha</label>
+          <input type="password" id="password" name="password" autocomplete="current-password" required>
+        </div>
+
+        <p id="login-error" class="form-error" role="alert" aria-live="assertive"></p>
+
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+
+        <div class="demo-accounts">
+          <p>Contas de teste:</p>
+          <button type="button" class="chip" data-user="admin" data-pass="admin123">admin / admin123 (Administrador)</button>
+          <button type="button" class="chip" data-user="colaborador" data-pass="colab123">colaborador / colab123 (Colaborador)</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <div class="accessibility-panel" id="accessibility-panel" hidden role="dialog" aria-labelledby="accessibility-title">
+    <div class="accessibility-box">
+      <div class="accessibility-head"><h2 id="accessibility-title">Acessibilidade</h2><button id="accessibility-close" class="btn btn-ghost" type="button">Fechar</button></div>
+      <p>Ajuste a visualização conforme sua necessidade.</p>
+      <div class="accessibility-actions">
+        <button id="accessibility-font-decrease" class="btn btn-ghost" type="button">A− Diminuir texto</button>
+        <button id="accessibility-font-reset" class="btn btn-ghost" type="button">A Resetar texto</button>
+        <button id="accessibility-font-increase" class="btn btn-ghost" type="button">A+ Aumentar texto</button>
+        <button id="accessibility-contrast" class="btn btn-primary" type="button">Alto contraste</button>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', initLoginPage);
+  </script>
+</body>
+</html>
